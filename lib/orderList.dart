@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ryz/AppState.dart';
 import 'package:ryz/controllers/orderController.dart';
-import 'package:ryz/orderdetails.dart';
+import 'package:ryz/orderDetails.dart';
 
 class OrderList extends StatefulWidget {
   const OrderList({Key? key}) : super(key: key);

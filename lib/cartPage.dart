@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:ryz/AppState.dart';
-import 'package:ryz/addaddress.dart';
+import 'package:ryz/addAddress.dart';
 import 'package:ryz/controllers/cartController.dart';
 import 'package:ryz/controllers/cartDataController.dart';
 import 'package:ryz/controllers/orderController.dart';

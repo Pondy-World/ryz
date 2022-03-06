@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ryz/AppState.dart';
-import 'package:ryz/cartpage.dart';
+import 'package:ryz/cartPage.dart';
 import 'package:ryz/controllers/cartController.dart';
 import 'package:ryz/home/homePage.dart';
 import 'package:ryz/login.dart';
-import 'package:ryz/orderlist.dart';
-import 'package:ryz/profilebody.dart';
+import 'package:ryz/orderList.dart';
+import 'package:ryz/profileBody.dart';
 import 'package:ryz/shops/ShopListController.dart';
 import 'package:ryz/shops/shopList.dart';
 import 'package:search_page/search_page.dart';
