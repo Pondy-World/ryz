@@ -4,138 +4,99 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ProfileOnlyIndexMain extends StatelessWidget {
-  final selectedshop;
+  final selectedShop;
 
-  const ProfileOnlyIndexMain({Key? key, this.selectedshop}) : super(key: key);
+  const ProfileOnlyIndexMain({Key? key, this.selectedShop}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ProfileOnlyIndex(selectedshop: selectedshop,);
+    return ProfileOnlyIndex(
+      selectedShop: selectedShop,
+    );
   }
 }
 
 class ProfileOnlyIndex extends StatefulWidget {
-  final selectedshop;
+  final selectedShop;
 
-  const ProfileOnlyIndex({Key? key, this.selectedshop}) : super(key: key);
+  const ProfileOnlyIndex({Key? key, this.selectedShop}) : super(key: key);
 
   @override
-  _ProfileOnlyIndexState createState() => _ProfileOnlyIndexState(selectedshop);
+  _ProfileOnlyIndexState createState() => _ProfileOnlyIndexState(selectedShop);
 }
 
 class _ProfileOnlyIndexState extends State<ProfileOnlyIndex> {
+  final selectedShop;
 
-  final selectedshop;
-
-  _ProfileOnlyIndexState(this.selectedshop);
+  _ProfileOnlyIndexState(this.selectedShop);
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    print(selectedshop);
+    print(selectedShop);
   }
 
   @override
   Widget build(BuildContext context) {
-
-
     var width = MediaQuery.of(context).size.width;
 
-
-    Widget smallScreen(){
+    Widget smallScreen() {
       return Scaffold(
         appBar: AppBar(
-          title: Text(selectedshop['shop_name']),
+          title: Text(selectedShop['shop_name']),
         ),
         body: CustomScrollView(
           slivers: [
-
             SliverToBoxAdapter(
               child: CarouselSlider(
                 options: CarouselOptions(
-                    height: 150.0,
+                  height: 150.0,
                   autoPlay: true,
                   autoPlayInterval: Duration(seconds: 2),
                 ),
-                items:["https://ryz.pondyworld.com/admin/upload/"+selectedshop['image'],"https://ryz.pondyworld.com/admin/upload/"+selectedshop['image'],].map((i) {
+                items: [
+                  "https://ryz.co.in/admin/upload/" + selectedShop['image'],
+                  "https://ryz.co.in/admin/upload/" + selectedShop['image'],
+                ].map((i) {
                   return Builder(
                     builder: (BuildContext context) {
                       return Container(
                           width: MediaQuery.of(context).size.width,
                           margin: EdgeInsets.symmetric(horizontal: 5.0),
                           decoration: BoxDecoration(
-                            // color: Colors.amber
-                          ),
-                          child: Image.network(
-                              i
-                          )
-                      );
+                              // color: Colors.amber
+                              ),
+                          child: Image.network(i));
                     },
                   );
                 }).toList(),
               ),
             ),
-            //
-            // SliverToBoxAdapter(
-            //   child: Padding(
-            //     padding: const EdgeInsets.all(8.0),
-            //     child: Container(
-            //       height: MediaQuery.of(context).size.height/4,
-            //       child: Card(
-            //           elevation: 1,
-            //           child:
-            //           Image.network(
-            //             "https://ryz.pondyworld.com/admin/upload/"+selectedshop['image'],
-            //             fit: BoxFit.cover,
-            //           )
-            //       ),
-            //     ),
-            //   ),
-            // ),
 
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 4,
-                    left: 8,
-                    bottom: 8
-                ),
+                padding: const EdgeInsets.only(top: 4, left: 8, bottom: 8),
                 child: Text(
-                  selectedshop['category_name'],
-                  style: TextStyle(
-                      fontSize: 17,
-                      color: Colors.grey
-                  ),
+                  selectedShop['category_name'],
+                  style: TextStyle(fontSize: 17, color: Colors.grey),
                 ),
               ),
             ),
 
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 4,
-                    left: 8,
-                    bottom: 8
-                ),
+                padding: const EdgeInsets.only(top: 4, left: 8, bottom: 8),
                 child: Text(
-                  selectedshop['shop_name'],
-                  style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500
-                  ),
+                  selectedShop['shop_name'],
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
                 ),
               ),
             ),
 
-
             SliverToBoxAdapter(
               child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 0,
-                      left: 0,
-                      bottom: 0
-                  ),
+                  padding: const EdgeInsets.only(top: 0, left: 0, bottom: 0),
                   child: RatingBar.builder(
                     itemSize: 25,
                     initialRating: 3,
@@ -151,15 +112,12 @@ class _ProfileOnlyIndexState extends State<ProfileOnlyIndex> {
                     onRatingUpdate: (rating) {
                       print(rating);
                     },
-                  )
-              ),
+                  )),
             ),
-
 
             SliverToBoxAdapter(
               child: Padding(
                   padding: const EdgeInsets.all(10),
-
                   child: Table(
                     // border: TableBorder.all(),
 
@@ -175,153 +133,125 @@ class _ProfileOnlyIndexState extends State<ProfileOnlyIndex> {
                             verticalAlignment: TableCellVerticalAlignment.top,
                             child: Text(
                               "Address:",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.blueGrey
-                              ),
+                              style: TextStyle(fontSize: 20, color: Colors.blueGrey),
                             ),
                           ),
                           TableCell(
                             verticalAlignment: TableCellVerticalAlignment.top,
                             child: Text(
-                              selectedshop['shop_street']+" "+selectedshop['shop_city']+" "+selectedshop['shop_state']+" "+selectedshop['shop_pincode'],
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.blueGrey
-                              ),
+                              selectedShop['shop_street'] +
+                                  " " +
+                                  selectedShop['shop_city'] +
+                                  " " +
+                                  selectedShop['shop_state'] +
+                                  " " +
+                                  selectedShop['shop_pincode'],
+                              style: TextStyle(fontSize: 20, color: Colors.blueGrey),
                             ),
                           ),
-
                         ],
                       ),
-
-
                       TableRow(
                         children: <Widget>[
                           Text(
                             "Status:",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.blueGrey
-                            ),
+                            style: TextStyle(fontSize: 20, color: Colors.blueGrey),
                           ),
                           TableCell(
                             verticalAlignment: TableCellVerticalAlignment.top,
                             child: Text(
-                              selectedshop['status'],
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.blueGrey
-                              ),
+                              selectedShop['status'],
+                              style: TextStyle(fontSize: 20, color: Colors.blueGrey),
                             ),
                           ),
-
                         ],
                       ),
-
                       TableRow(
                         children: <Widget>[
                           Text(
                             "Contact No.: ",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.blueGrey
-                            ),
+                            style: TextStyle(fontSize: 20, color: Colors.blueGrey),
                           ),
                           TableCell(
                             verticalAlignment: TableCellVerticalAlignment.top,
                             child: Text(
-                              selectedshop['shop_number'],
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.blueGrey
-                              ),
+                              selectedShop['shop_number'],
+                              style: TextStyle(fontSize: 20, color: Colors.blueGrey),
                             ),
                           ),
-
                         ],
                       ),
-
                       TableRow(
                         children: <Widget>[
                           Text(
                             "Code:",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.blueGrey
-                            ),
+                            style: TextStyle(fontSize: 20, color: Colors.blueGrey),
                           ),
                           TableCell(
                             verticalAlignment: TableCellVerticalAlignment.top,
                             child: Text(
-                              selectedshop['shop_code'],
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.blueGrey
-                              ),
+                              selectedShop['shop_code'],
+                              style: TextStyle(fontSize: 20, color: Colors.blueGrey),
                             ),
                           ),
-
                         ],
                       ),
-
                       TableRow(
                         children: <Widget>[
                           Text(
                             "GST no.:",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.blueGrey
-                            ),
+                            style: TextStyle(fontSize: 20, color: Colors.blueGrey),
                           ),
                           TableCell(
                             verticalAlignment: TableCellVerticalAlignment.top,
                             child: Text(
-                              selectedshop['gst_num'],
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.blueGrey
-                              ),
+                              selectedShop['gst_num'],
+                              style: TextStyle(fontSize: 20, color: Colors.blueGrey),
                             ),
                           ),
-
                         ],
                       ),
-                      TableRow(
-                          children: <Widget>[
-                            Text('Connect with Us:', style: TextStyle(fontSize: 20, color: Colors.blueGrey),),
-                            TableCell(child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Icon(Icons.facebook, color: Colors.blueGrey,),
-                                Icon(Icons.whatsapp, color: Colors.blueGrey,),
-                                Icon(FontAwesomeIcons.instagram, color: Colors.blueGrey,),
-                                Icon(FontAwesomeIcons.linkedin, color: Colors.blueGrey,)
-                              ],
-                            ))
-
-                          ]
-                      )
-
-
+                      TableRow(children: <Widget>[
+                        Text(
+                          'Connect with Us:',
+                          style: TextStyle(fontSize: 20, color: Colors.blueGrey),
+                        ),
+                        TableCell(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Icon(
+                              Icons.facebook,
+                              color: Colors.blueGrey,
+                            ),
+                            Icon(
+                              Icons.whatsapp,
+                              color: Colors.blueGrey,
+                            ),
+                            Icon(
+                              FontAwesomeIcons.instagram,
+                              color: Colors.blueGrey,
+                            ),
+                            Icon(
+                              FontAwesomeIcons.linkedin,
+                              color: Colors.blueGrey,
+                            )
+                          ],
+                        ))
+                      ])
                     ],
-                  )
-              ),
+                  )),
             ),
-
-
-
           ],
         ),
       );
     }
 
-    Widget largeScreen(){
-
+    Widget largeScreen() {
       return Scaffold(
         appBar: AppBar(
           title: Text(
-            selectedshop['shop_name'],
+            selectedShop['shop_name'],
           ),
         ),
         body: CustomScrollView(
@@ -333,61 +263,35 @@ class _ProfileOnlyIndexState extends State<ProfileOnlyIndex> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     Container(
-                      height: MediaQuery.of(context).size.height/4,
+                      height: MediaQuery.of(context).size.height / 4,
                       child: Card(
                           elevation: 1,
-                          child:
-                          Image.network(
-                            "https://ryz.pondyworld.com/admin/upload/"+selectedshop['image'],
+                          child: Image.network(
+                            "https://ryz.co.in/admin/upload/" + selectedShop['image'],
                             fit: BoxFit.cover,
-                          )
-                      ),
+                          )),
                     ),
-
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(
-                              top: 4,
-                              left: 8,
-                              bottom: 8
-                          ),
+                          padding: const EdgeInsets.only(top: 4, left: 8, bottom: 8),
                           child: Text(
-                            selectedshop['category_name'],
-                            style: TextStyle(
-                                fontSize: 17,
-                                color: Colors.grey
-                            ),
+                            selectedShop['category_name'],
+                            style: TextStyle(fontSize: 17, color: Colors.grey),
                           ),
                         ),
-
                         Padding(
-                          padding: const EdgeInsets.only(
-                              top: 4,
-                              left: 8,
-                              bottom: 8
-                          ),
+                          padding: const EdgeInsets.only(top: 4, left: 8, bottom: 8),
                           child: Text(
-                            selectedshop['shop_name'],
-                            style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.w500
-                            ),
+                            selectedShop['shop_name'],
+                            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
                           ),
                         ),
-
-
                         Padding(
-                            padding: const EdgeInsets.only(
-                                top: 0,
-                                left: 0,
-                                bottom: 0
-                            ),
+                            padding: const EdgeInsets.only(top: 0, left: 0, bottom: 0),
                             child: RatingBar.builder(
                               itemSize: 25,
                               initialRating: 3,
@@ -403,16 +307,9 @@ class _ProfileOnlyIndexState extends State<ProfileOnlyIndex> {
                               onRatingUpdate: (rating) {
                                 print(rating);
                               },
-                            )
-                        ),
-
+                            )),
                         Padding(
-                            padding: const EdgeInsets.only(
-                                top: 4,
-                                left: 8,
-                                bottom: 8,
-                                right: 8
-                            ),
+                            padding: const EdgeInsets.only(top: 4, left: 8, bottom: 8, right: 8),
                             child: Table(
                               // border: TableBorder.all(),
 
@@ -426,127 +323,87 @@ class _ProfileOnlyIndexState extends State<ProfileOnlyIndex> {
                                   children: <Widget>[
                                     Text(
                                       "Address:",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.blueGrey
-                                      ),
+                                      style: TextStyle(fontSize: 15, color: Colors.blueGrey),
                                     ),
                                     TableCell(
                                       verticalAlignment: TableCellVerticalAlignment.top,
                                       child: Text(
-                                        selectedshop['shop_street']+" "+selectedshop['shop_city']+" "+selectedshop['shop_state']+" "+selectedshop['shop_pincode'],
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.black
-                                        ),
+                                        selectedShop['shop_street'] +
+                                            " " +
+                                            selectedShop['shop_city'] +
+                                            " " +
+                                            selectedShop['shop_state'] +
+                                            " " +
+                                            selectedShop['shop_pincode'],
+                                        style: TextStyle(fontSize: 15, color: Colors.black),
                                       ),
                                     ),
-
                                   ],
                                 ),
-
-
                                 TableRow(
                                   children: <Widget>[
                                     Text(
                                       "Status:",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.blueGrey
-                                      ),
+                                      style: TextStyle(fontSize: 15, color: Colors.blueGrey),
                                     ),
                                     TableCell(
                                       verticalAlignment: TableCellVerticalAlignment.top,
                                       child: Text(
-                                        selectedshop['status'],
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.black
-                                        ),
+                                        selectedShop['status'],
+                                        style: TextStyle(fontSize: 15, color: Colors.black),
                                       ),
                                     ),
-
                                   ],
                                 ),
-
                                 TableRow(
                                   children: <Widget>[
                                     Text(
                                       "Contact No.: ",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.blueGrey
-                                      ),
+                                      style: TextStyle(fontSize: 15, color: Colors.blueGrey),
                                     ),
                                     TableCell(
                                       verticalAlignment: TableCellVerticalAlignment.top,
                                       child: Text(
-                                        selectedshop['shop_number'],
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.black
-                                        ),
+                                        selectedShop['shop_number'],
+                                        style: TextStyle(fontSize: 15, color: Colors.black),
                                       ),
                                     ),
-
                                   ],
                                 ),
-
                                 TableRow(
                                   children: <Widget>[
                                     Text(
                                       "Code:",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.blueGrey
-                                      ),
+                                      style: TextStyle(fontSize: 15, color: Colors.blueGrey),
                                     ),
                                     TableCell(
                                       verticalAlignment: TableCellVerticalAlignment.top,
                                       child: Text(
-                                        selectedshop['shop_code'],
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.black
-                                        ),
+                                        selectedShop['shop_code'],
+                                        style: TextStyle(fontSize: 15, color: Colors.black),
                                       ),
                                     ),
-
                                   ],
                                 ),
-
                                 TableRow(
                                   children: <Widget>[
                                     Text(
                                       "GST no.:",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.blueGrey
-                                      ),
+                                      style: TextStyle(fontSize: 15, color: Colors.blueGrey),
                                     ),
                                     TableCell(
                                       verticalAlignment: TableCellVerticalAlignment.top,
                                       child: Text(
-                                        selectedshop['gst_num'],
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.black
-                                        ),
+                                        selectedShop['gst_num'],
+                                        style: TextStyle(fontSize: 20, color: Colors.black),
                                       ),
                                     ),
-
                                   ],
                                 ),
-
-
                               ],
-                            )
-                        ),
-
-
+                            )),
                       ],
                     )
-
                   ],
                 ),
               ),
@@ -556,12 +413,6 @@ class _ProfileOnlyIndexState extends State<ProfileOnlyIndex> {
       );
     }
 
-    return (width<800)?
-    smallScreen()
-        :
-    largeScreen();
-
-
-
+    return (width < 800) ? smallScreen() : largeScreen();
   }
 }

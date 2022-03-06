@@ -1,40 +1,39 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:localstorage/localstorage.dart';
-import 'package:ryz/controllers/ordercontroller.dart';
+import 'package:ryz/controllers/orderController.dart';
 
 class OrderDetailsMain extends StatelessWidget {
-  final selectedorder;
+  final selectedOrder;
 
-  const OrderDetailsMain({Key? key, this.selectedorder}) : super(key: key);
+  const OrderDetailsMain({Key? key, this.selectedOrder}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return OrderDetails(
-      selectedorder: selectedorder,
+      selectedOrder: selectedOrder,
     );
   }
 }
 
 class OrderDetails extends StatefulWidget {
-  final selectedorder;
+  final selectedOrder;
 
-  const OrderDetails({Key? key, this.selectedorder}) : super(key: key);
+  const OrderDetails({Key? key, this.selectedOrder}) : super(key: key);
 
   @override
-  _OrderDetailsState createState() => _OrderDetailsState(selectedorder);
+  _OrderDetailsState createState() => _OrderDetailsState(selectedOrder);
 }
 
 class _OrderDetailsState extends State<OrderDetails> {
-  final selectedorder;
+  final selectedOrder;
 
-  OrderController ordercontobj = new OrderController();
+  OrderController orderController = new OrderController();
 
-  _OrderDetailsState(this.selectedorder);
+  _OrderDetailsState(this.selectedOrder);
 
   getData() async {
-    await ordercontobj.fetchOrderdetails(selectedorder['id']);
+    await orderController.fetchOrderDetails(orderID: selectedOrder['id'].toString());
 
     setState(() {});
   }
@@ -74,57 +73,46 @@ class _OrderDetailsState extends State<OrderDetails> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                selectedorder['service_name'],
-                                style: TextStyle(
-                                    color: Colors.blue, fontSize: 20),
+                                selectedOrder['service_name'],
+                                style: TextStyle(color: Colors.blue, fontSize: 20),
                               ),
                               Text(
-                                selectedorder['service_city'],
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 15),
+                                selectedOrder['service_city'],
+                                style: TextStyle(color: Colors.grey, fontSize: 15),
                               ),
                               Text(
-                                "Total Value: " +
-                                    selectedorder['amount'].toString() + " ₹",
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 15),
+                                "Total Value: " + selectedOrder['amount'].toString() + " ₹",
+                                style: TextStyle(color: Colors.grey, fontSize: 15),
                               ),
                             ],
                           ),
                           Text(
-                            selectedorder['order_status'].toString(),
+                            selectedOrder['order_status'].toString(),
                             textAlign: TextAlign.right,
                             style: TextStyle(color: Colors.black, fontSize: 15),
                           ),
                         ],
                       ),
                       Text(
-                        "Order id: " + selectedorder['id'].toString(),
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold),
+                        "Order id: " + selectedOrder['id'].toString(),
+                        style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                     ],
                   )),
             ),
           ),
-
           SliverToBoxAdapter(
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                    "Order details",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.blue
-                  ),
+                  "Order details",
+                  style: TextStyle(fontSize: 18, color: Colors.blue),
                 ),
               ),
             ),
           ),
-          (ordercontobj.orderdetails == null)
+          (orderController.orderDetails == null)
               ? SliverToBoxAdapter(
                   child: Center(
                       child: CircularProgressIndicator(
@@ -132,13 +120,12 @@ class _OrderDetailsState extends State<OrderDetails> {
                   )),
                 )
               : SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                    var single = ordercontobj.orderdetails[0];
+                  delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                    var single = orderController.orderDetails[0];
                     List<dynamic> productAmounts = jsonDecode(single['product_amounts']);
                     List<dynamic> productQuantity = jsonDecode(single['product_quantity']);
                     List<String> productTitles = single['title'].toString().replaceAll("[", "").replaceAll("]", "").split(", ");
-                    num tot=  productAmounts[index]  *  productQuantity[index];
+                    num tot = productAmounts[index] * productQuantity[index];
                     return Card(
                       child: Padding(
                         padding: const EdgeInsets.all(0),
@@ -146,18 +133,16 @@ class _OrderDetailsState extends State<OrderDetails> {
                           title: Text(
                             productTitles[index],
                             style: TextStyle(
-                                color: Colors.black,
+                              color: Colors.black,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
-
                           subtitle: Text(
                             "per Unit: " + (productAmounts[index]).toString(),
                             style: TextStyle(
                               color: Colors.black,
                             ),
                           ),
-
                           trailing: Text(
                             tot.toString() + " ₹",
                             style: TextStyle(
@@ -167,17 +152,14 @@ class _OrderDetailsState extends State<OrderDetails> {
                         ),
                       ),
                     );
-                  }, childCount: jsonDecode(ordercontobj.orderdetails[0]["product_amounts"]).length),
+                  }, childCount: jsonDecode(orderController.orderDetails[0]["product_amounts"]).length),
                 ),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "Total: ${selectedorder['amount'].toString()} ₹",
-                style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.blue
-                ),
+                "Total: ${selectedOrder['amount'].toString()} ₹",
+                style: TextStyle(fontSize: 18, color: Colors.blue),
               ),
             ),
           ),

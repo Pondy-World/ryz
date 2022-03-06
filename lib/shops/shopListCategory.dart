@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:ryz/productlst.dart';
+import 'package:ryz/productList.dart';
 import 'package:ryz/profileonlyshop/poindex.dart';
-import 'package:ryz/shops/ShopListcontroller.dart';
+import 'package:ryz/shops/ShopListController.dart';
 
 class ShopListCat extends StatefulWidget {
   final String headingVal;
@@ -28,9 +28,8 @@ class _ShopListcatState extends State<ShopListCat> {
 
   fetchData() async {
     print("*****");
-    print(shopcont.shoplistresponse);
+    print(shopcont.shopListResponse);
     await shopcont.fetchShopsCat(headid);
-    setState(() {});
   }
 
   @override
@@ -88,7 +87,7 @@ class _ShopListcatState extends State<ShopListCat> {
             MediaQuery.of(context).padding.top + 55,
           ),
         ),
-        body: (shopcont.shoplistresponse["data"] == null)
+        body: (shopcont.shopListResponse["data"] == null)
             ? Center(
                 child: CircularProgressIndicator(
                   color: Colors.teal,
@@ -126,14 +125,14 @@ class _ShopListcatState extends State<ShopListCat> {
                           padding: const EdgeInsets.only(top: 4, right: 8, left: 8),
                           child: InkWell(
                             onTap: () {
-                              print(shopcont.shoplistresponse["data"][index]["shoptype"]);
-                              if (shopcont.shoplistresponse["data"][index]["shoptype"] == "1") {
+                              print(shopcont.shopListResponse["data"][index]["shoptype"]);
+                              if (shopcont.shopListResponse["data"][index]["shoptype"] == "1") {
                                 print("normal shop");
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ProfileOnlyIndexMain(
-                                            selectedshop: shopcont.shoplistresponse["data"][index],
+                                            selectedShop: shopcont.shopListResponse["data"][index],
                                           )),
                                 );
                               } else {
@@ -173,7 +172,7 @@ class _ShopListcatState extends State<ShopListCat> {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8),
                                       child: Image.network(
-                                        "https://ryz.pondyworld.com/admin/upload/"+shopcont.shoplistresponse["data"][index]["image"],
+                                        "https://ryz.co.in/admin/upload/"+shopcont.shopListResponse["data"][index]["image"],
                                         width: 100,
                                         height: 100,
                                       ),
@@ -187,17 +186,17 @@ class _ShopListcatState extends State<ShopListCat> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              shopcont.shoplistresponse["data"][index]["shop_name"],
+                                              shopcont.shopListResponse["data"][index]["shop_name"],
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(fontFamily: 'Lato', fontSize: 20, fontWeight: FontWeight.bold),
                                             ),
                                             Text(
-                                              shopcont.shoplistresponse["data"][index]["category_name"],
+                                              shopcont.shopListResponse["data"][index]["category_name"],
                                               style: TextStyle(fontSize: 17, fontWeight: FontWeight.normal, color: Colors.grey),
                                             ),
                                             Text(
-                                              shopcont.shoplistresponse["data"][index]["shop_street"],
+                                              shopcont.shopListResponse["data"][index]["shop_street"],
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal, color: Colors.black, fontFamily: 'Lato'),
@@ -221,7 +220,7 @@ class _ShopListcatState extends State<ShopListCat> {
                           ),
                         );
                       },
-                      childCount: shopcont.shoplistresponse["data"].length,
+                      childCount: shopcont.shopListResponse["data"].length,
                     ),
                   ),
                 ],

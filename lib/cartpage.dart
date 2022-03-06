@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:ryz/AppState.dart';
 import 'package:ryz/addaddress.dart';
-import 'package:ryz/controllers/cartcontroller.dart';
-import 'package:ryz/controllers/cartdatacontroller.dart';
-import 'package:ryz/controllers/ordercontroller.dart';
+import 'package:ryz/controllers/cartController.dart';
+import 'package:ryz/controllers/cartDataController.dart';
+import 'package:ryz/controllers/orderController.dart';
 import 'package:ryz/login.dart';
 
 var selectedWidgetMarker;
@@ -19,35 +18,32 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  CartDataController procartobj = new CartDataController();
-  OrderController ordercontobj = new OrderController();
-  var cartids = [];
-  num carttotal = 0;
+  CartDataController cartDataController = new CartDataController();
+  OrderController orderController = new OrderController();
+  var cartIDs = [];
+  num cartTotal = 0;
 
-  var addressstring;
+  var addressString;
 
-  getcartdata() async {
-    carttotal = 0;
+  getCartData() async {
+    cartTotal = 0;
 
-    await procartobj.cartProductRequest();
-    print(procartobj.cartproducts.length);
-    for (var cartpds in procartobj.cartproducts) {
-      // print(cartpds['id']);
-      // cartids.add(cartpds['id']);
+    await cartDataController.cartProductRequest();
+    print(cartDataController.cartProducts.length);
+    for (var product in cartDataController.cartProducts) {
 
-      carttotal = carttotal + (double.parse(cartpds['price']) * cartpds['count'].toInt());
-      print("to oucnter");
-      print(carttotal.toString());
+      cartTotal = cartTotal + (double.parse(product['price']) * product['count'].toInt());
+      print(cartTotal.toString());
     }
     setState(() {});
   }
 
   getAddress() async {
     final LocalStorage storage = new LocalStorage('ryxstorage');
-    addressstring = await storage.getItem("addressdetails");
-    print("addressstring");
-    print(addressstring);
-    print("addressstring");
+    addressString = await storage.getItem("addressdetails");
+    print("addressString");
+    print(addressString);
+    print("addressString");
     setState(() {});
   }
 
@@ -56,13 +52,13 @@ class _CartPageState extends State<CartPage> {
     // TODO: implement initState
     selectedWidgetMarker = 1;
     super.initState();
-    getcartdata();
+    getCartData();
     getAddress();
   }
 
   @override
   Widget build(BuildContext context) {
-    return (procartobj.cartproducts.isEmpty)
+    return (cartDataController.cartProducts.isEmpty)
         ? Padding(
             padding: const EdgeInsets.all(8.0),
             child: Center(
@@ -81,7 +77,6 @@ class _CartPageState extends State<CartPage> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
-                        var pricetot = double.parse(procartobj.cartproducts[index]['price']) * procartobj.cartproducts[index]['count'];
                         return Container(
                           color: Colors.white,
                           child: Padding(
@@ -92,7 +87,7 @@ class _CartPageState extends State<CartPage> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Image.network(
-                                    procartobj.cartproducts[index]['imgurlval'],
+                                    cartDataController.cartProducts[index]['imgurlval'],
                                     width: 100,
                                     height: 100,
                                   ),
@@ -106,13 +101,13 @@ class _CartPageState extends State<CartPage> {
                                           children: [
                                             Flexible(
                                               child: Text(
-                                                procartobj.cartproducts[index]['name'],
+                                                cartDataController.cartProducts[index]['name'],
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
                                               ),
                                             ),
-                                            Text(procartobj.cartproducts[index]['price']),
+                                            Text(cartDataController.cartProducts[index]['price']),
                                           ],
                                         ),
                                       ),
@@ -129,31 +124,31 @@ class _CartPageState extends State<CartPage> {
                                               onTap: () async {
                                                 print("Minus one");
 
-                                                var count = procartobj.cartproducts[index]['count'];
+                                                var count = cartDataController.cartProducts[index]['count'];
 
                                                 if (count == 1) {
                                                   // await CartController().deleteCrtProduct(procartobj.cartproducts[index]['id'].toString());
 
-                                                  await CartControllerSelf().deleteProduct(procartobj.cartproducts[index]['id'].toString());
-                                                  await getcartdata();
+                                                  await CartControllerSelf().deleteProduct(cartDataController.cartProducts[index]['id'].toString());
+                                                  await getCartData();
                                                 } else {
                                                   count = count - 1;
 
                                                   var pdvproduct = CrtPds2(
-                                                    id: procartobj.cartproducts[index]['id'],
-                                                    name: procartobj.cartproducts[index]['name'],
-                                                    amount: procartobj.cartproducts[index]['amount'],
+                                                    id: cartDataController.cartProducts[index]['id'],
+                                                    name: cartDataController.cartProducts[index]['name'],
+                                                    amount: cartDataController.cartProducts[index]['amount'],
                                                     count: count,
-                                                    imgurlval: procartobj.cartproducts[index]['imgurlval'],
-                                                    price: procartobj.cartproducts[index]['price'],
-                                                    offer: procartobj.cartproducts[index]['offer'],
-                                                    offerprice: procartobj.cartproducts[index]['offerprice'],
-                                                    weight: procartobj.cartproducts[index]['weight'],
+                                                    imageURLValue: cartDataController.cartProducts[index]['imgurlval'],
+                                                    price: cartDataController.cartProducts[index]['price'],
+                                                    offer: cartDataController.cartProducts[index]['offer'],
+                                                    offerPrice: cartDataController.cartProducts[index]['offerprice'],
+                                                    weight: cartDataController.cartProducts[index]['weight'],
                                                   );
 
                                                   await CartControllerSelf().insertProduct(pdvproduct);
 
-                                                  await getcartdata();
+                                                  await getCartData();
                                                 }
                                               },
                                               child: Icon(
@@ -165,7 +160,7 @@ class _CartPageState extends State<CartPage> {
                                             Padding(
                                               padding: const EdgeInsets.only(right: 10, left: 10),
                                               child: Text(
-                                                procartobj.cartproducts[index]['count'].toString(),
+                                                cartDataController.cartProducts[index]['count'].toString(),
                                                 style: TextStyle(
                                                     fontSize: 20,
                                                     fontFamily: "Lato",
@@ -178,25 +173,25 @@ class _CartPageState extends State<CartPage> {
                                               onTap: () async {
                                                 print("Plus one");
 
-                                                var count = procartobj.cartproducts[index]['count'];
+                                                var count = cartDataController.cartProducts[index]['count'];
 
                                                 count = count + 1;
 
                                                 var pdvproduct = CrtPds2(
-                                                  id: procartobj.cartproducts[index]['id'],
-                                                  name: procartobj.cartproducts[index]['name'],
-                                                  amount: procartobj.cartproducts[index]['amount'],
+                                                  id: cartDataController.cartProducts[index]['id'],
+                                                  name: cartDataController.cartProducts[index]['name'],
+                                                  amount: cartDataController.cartProducts[index]['amount'],
                                                   count: count,
-                                                  imgurlval: procartobj.cartproducts[index]['imgurlval'],
-                                                  price: procartobj.cartproducts[index]['price'],
-                                                  offer: procartobj.cartproducts[index]['offer'],
-                                                  offerprice: procartobj.cartproducts[index]['offerprice'],
-                                                  weight: procartobj.cartproducts[index]['weight'],
+                                                  imageURLValue: cartDataController.cartProducts[index]['imgurlval'],
+                                                  price: cartDataController.cartProducts[index]['price'],
+                                                  offer: cartDataController.cartProducts[index]['offer'],
+                                                  offerPrice: cartDataController.cartProducts[index]['offerprice'],
+                                                  weight: cartDataController.cartProducts[index]['weight'],
                                                 );
 
                                                 await CartControllerSelf().insertProduct(pdvproduct);
 
-                                                await getcartdata();
+                                                await getCartData();
                                               },
                                               child: Icon(
                                                 Icons.add_circle_outline_outlined,
@@ -215,7 +210,7 @@ class _CartPageState extends State<CartPage> {
                           ),
                         );
                       },
-                      childCount: procartobj.cartproducts.length,
+                      childCount: cartDataController.cartProducts.length,
                     ),
                   ),
                   SliverToBoxAdapter(
@@ -245,19 +240,19 @@ class _CartPageState extends State<CartPage> {
                                 ),
                                 Expanded(
                                     child: Text(
-                                  (addressstring == null)
+                                  (addressString == null)
                                       ? ""
-                                      : addressstring['doorno'] +
+                                      : addressString['doorno'] +
                                           " " +
-                                          addressstring['addressa'] +
+                                          addressString['addressa'] +
                                           " " +
-                                          addressstring['addressb'] +
+                                          addressString['addressb'] +
                                           " " +
-                                          addressstring['landmark'] +
+                                          addressString['landmark'] +
                                           " " +
-                                          addressstring['city'] +
+                                          addressString['city'] +
                                           " " +
-                                          addressstring['pincode'],
+                                          addressString['pincode'],
                                 )),
                                 InkWell(
                                     onTap: () {
@@ -277,7 +272,7 @@ class _CartPageState extends State<CartPage> {
                                             return;
                                           } else {
                                             setState(() {
-                                              addressstring = val;
+                                              addressString = val;
                                             });
                                           }
                                         });
@@ -309,7 +304,7 @@ class _CartPageState extends State<CartPage> {
                                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
                                   ),
                                   Text(
-                                    "Rs." + carttotal.toString(),
+                                    "Rs." + cartTotal.toString(),
                                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.blueGrey),
                                   ),
                                 ],
@@ -333,10 +328,9 @@ class _CartPageState extends State<CartPage> {
                                         }),
                                       ).then((val) {
                                         if (val == null) {
-                                          // addressstring="";
                                         } else {
                                           setState(() {
-                                            addressstring = val;
+                                            addressString = val;
                                           });
                                         }
                                       });
@@ -348,7 +342,7 @@ class _CartPageState extends State<CartPage> {
                                           timeInSecForIosWeb: 1,
                                           fontSize: 16.0);
 
-                                      var success = await ordercontobj.addOrder(procartobj.cartproducts, carttotal);
+                                      var success = await orderController.addOrder(orderData: cartDataController.cartProducts, total: cartTotal);
 
                                       if (success == "true") {
                                         Fluttertoast.showToast(
@@ -360,7 +354,7 @@ class _CartPageState extends State<CartPage> {
 
                                         final LocalStorage storage = new LocalStorage('ryxstorage');
                                         storage.deleteItem("cartelements");
-                                        getcartdata();
+                                        getCartData();
                                         setState(() {});
                                       } else {
                                         Fluttertoast.showToast(

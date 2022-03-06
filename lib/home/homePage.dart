@@ -1,12 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:ryz/home/homepagecontroller.dart';
-import 'package:ryz/productlst.dart';
-import 'package:ryz/profileonlyshop/poindex.dart';
-import 'package:ryz/shops/ShopListcontroller.dart';
-import 'package:ryz/shops/shoplistcat.dart';
+import 'package:ryz/home/homePageController.dart';
+import 'package:ryz/productList.dart';
+import 'package:ryz/profileOnlyShop/poindex.dart';
+import 'package:ryz/shops/ShopListController.dart';
+import 'package:ryz/shops/shopListCategory.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -29,7 +27,7 @@ class _HomePageState extends State<HomePage> {
 
   fetchDataShop() async {
     print("*****");
-    print(shopController.shoplistresponse);
+    print(shopController.shopListResponse);
     await shopController.fetchAllShops();
     setState(() {});
   }
@@ -52,7 +50,7 @@ class _HomePageState extends State<HomePage> {
     "Pet Supplies",
   ];
 
-  var shopcount = [
+  var shopCount = [
     "24 shops",
     "20 shops",
     "28 shops",
@@ -63,7 +61,7 @@ class _HomePageState extends State<HomePage> {
     "26 shops",
   ];
 
-  var bannerimagae = [
+  var bannerImages = [
     "images/phot.jpg",
     "images/phot.jpg",
     "images/phot.jpg",
@@ -89,11 +87,10 @@ class _HomePageState extends State<HomePage> {
                     height: 10,
                   ),
                 ),
-
                 SliverToBoxAdapter(
                   child: CarouselSlider(
                     options: CarouselOptions(height: 150.0),
-                    items: bannerimagae.map((i) {
+                    items: bannerImages.map((i) {
                       return Builder(
                         builder: (BuildContext context) {
                           return Container(
@@ -108,13 +105,6 @@ class _HomePageState extends State<HomePage> {
                     }).toList(),
                   ),
                 ),
-                // SliverToBoxAdapter(
-                //   child: Padding(
-                //     padding: const EdgeInsets.all(8.0),
-                //     child: Image.asset("images/dtd.jpeg"),
-                //   ),
-                // ),
-
                 SliverGrid(
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 200.0,
@@ -131,8 +121,10 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ShopListCat(homeController.categoryResults["data"][index]["category_name"],
-                                        homeController.categoryResults["data"][index]["id"], homeController.categoryResults["data"][index]["catg_image"])));
+                                    builder: (context) => ShopListCat(
+                                        homeController.categoryResults["data"][index]["category_name"],
+                                        homeController.categoryResults["data"][index]["id"],
+                                        homeController.categoryResults["data"][index]["catg_image"])));
                           },
                           child: Container(
                               decoration: BoxDecoration(
@@ -152,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                                     style: TextStyle(fontSize: 20, color: Colors.black, fontFamily: "Lato"),
                                   ),
                                   Text(
-                                    shopcount[index],
+                                    shopCount[index],
                                     style: TextStyle(fontSize: 13, color: Colors.black45, fontFamily: "Lato"),
                                   ),
                                 ],
@@ -184,7 +176,7 @@ class _HomePageState extends State<HomePage> {
                 SliverToBoxAdapter(
                   child: CarouselSlider(
                     options: CarouselOptions(height: MediaQuery.of(context).size.height / 2, autoPlay: true, autoPlayInterval: Duration(seconds: 3)),
-                    items: bannerimagae.map((i) {
+                    items: bannerImages.map((i) {
                       return Builder(
                         builder: (BuildContext context) {
                           return Container(
@@ -237,7 +229,8 @@ class _HomePageState extends State<HomePage> {
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           Image.network(
-                                            "https://ryz.co.in/admin/upload/category/" + homeController.categoryResults["data"][index]["categ_banner"],
+                                            "https://ryz.co.in/admin/upload/category/" +
+                                                homeController.categoryResults["data"][index]["categ_banner"],
                                             width: 100,
                                           ),
                                           Text(
@@ -260,7 +253,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int mainindex) {
+                    (BuildContext context, int mainIndex) {
                       return Column(
                         children: [
                           Center(
@@ -270,7 +263,7 @@ class _HomePageState extends State<HomePage> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    homeController.categoryResults["data"][mainindex]["category_name"],
+                                    homeController.categoryResults["data"][mainIndex]["category_name"],
                                     style: TextStyle(color: Colors.black, fontSize: 25),
                                   ),
                                   ElevatedButton(onPressed: () {}, child: Text("View More"))
@@ -281,7 +274,7 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             height: 15,
                           ),
-                          (shopController.shoplistresponse["data"] == null)
+                          (shopController.shopListResponse["data"] == null)
                               ? Center(
                                   child: CircularProgressIndicator(
                                     color: Colors.teal,
@@ -292,23 +285,23 @@ class _HomePageState extends State<HomePage> {
                                     height: 250,
                                     width: MediaQuery.of(context).size.width - 200,
                                     child: ListView.builder(
-                                        itemCount: shopController.shoplistresponse["data"].length,
+                                        itemCount: shopController.shopListResponse["data"].length,
                                         scrollDirection: Axis.horizontal,
                                         itemBuilder: (BuildContext context, int index) {
-                                          return (shopController.shoplistresponse["data"][index]["category_name"] ==
-                                                  homeController.categoryResults["data"][mainindex]["category_name"])
+                                          return (shopController.shopListResponse["data"][index]["category_name"] ==
+                                                  homeController.categoryResults["data"][mainIndex]["category_name"])
                                               ? Padding(
                                                   padding: const EdgeInsets.all(10.0),
                                                   child: InkWell(
                                                     onTap: () {
-                                                      print(shopController.shoplistresponse["data"][index]["shoptype"]);
-                                                      if (shopController.shoplistresponse["data"][index]["shoptype"] == "1") {
+                                                      print(shopController.shopListResponse["data"][index]["shoptype"]);
+                                                      if (shopController.shopListResponse["data"][index]["shoptype"] == "1") {
                                                         print("normal shop");
                                                         Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
                                                               builder: (context) => ProfileOnlyIndexMain(
-                                                                    selectedshop: shopController.shoplistresponse["data"][index],
+                                                                    selectedShop: shopController.shopListResponse["data"][index],
                                                                   )),
                                                         );
                                                       } else {
@@ -334,13 +327,13 @@ class _HomePageState extends State<HomePage> {
                                                             crossAxisAlignment: CrossAxisAlignment.center,
                                                             children: [
                                                               Image.network(
-                                                                "https://ryz.pondyworld.com/admin/upload/" +
-                                                                    shopController.shoplistresponse["data"][index]["image"],
+                                                                "https://ryz.co.in/admin/upload/" +
+                                                                    shopController.shopListResponse["data"][index]["image"],
                                                                 // width: 250,
                                                                 height: 160,
                                                               ),
                                                               Text(
-                                                                shopController.shoplistresponse["data"][index]["shop_name"],
+                                                                shopController.shopListResponse["data"][index]["shop_name"],
                                                                 textAlign: TextAlign.center,
                                                                 overflow: TextOverflow.ellipsis,
                                                                 style: TextStyle(fontSize: 15, color: Colors.blueGrey, fontFamily: "Lato"),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:ryz/AppState.dart';
-import 'package:ryz/controllers/ordercontroller.dart';
+import 'package:ryz/controllers/orderController.dart';
 import 'package:ryz/orderdetails.dart';
 
 class OrderList extends StatefulWidget {
@@ -12,30 +11,27 @@ class OrderList extends StatefulWidget {
 }
 
 class _OrderListState extends State<OrderList> {
-
-  var displaytext= "No orders to show";
-  var login=RyzAppState().isLogin;
-  OrderController ordercontobj = new OrderController();
+  String displayText = "No orders to show";
+  bool login = RyzAppState().isLogin;
+  OrderController orderController = new OrderController();
 
   getData() async {
-    final LocalStorage storage = new LocalStorage('ryxstorage');
-
-    if(RyzAppState().isLogin){
-      var loginID= RyzAppState().id;
+    if (RyzAppState().isLogin) {
+      int loginID = int.parse(RyzAppState().id);
       print(loginID);
-      await ordercontobj.fetchOrders(loginID);
+      await orderController.fetchOrders(customerID: loginID);
       setState(() {});
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
+
   @override
   void initState() {
     // TODO: implement initState
     getData();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -45,120 +41,81 @@ class _OrderListState extends State<OrderList> {
             height: 5,
           ),
         ),
-
-        (login)?
-
-        (ordercontobj.orderlist==null)?
-
-        SliverToBoxAdapter(
-          child: Center(
-            child:CircularProgressIndicator(
-              color: Colors.blue,
-            )
-          ),
-        ):
-
-
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index){
-                    var singleorder= ordercontobj.orderlist["data"][index];
-                return InkWell(
-                  onTap: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => OrderDetailsMain(selectedorder: singleorder)
-                      ),
-                    );
-                  },
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-
+        (login)
+            ? (orderController.orderList == null)
+                ? SliverToBoxAdapter(
+                    child: Center(
+                        child: CircularProgressIndicator(
+                      color: Colors.blue,
+                    )),
+                  )
+                : SliverList(
+                    delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                      var singleOrder = orderController.orderList["data"][index];
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => OrderDetailsMain(selectedOrder: singleOrder)),
+                          );
+                        },
+                        child: Card(
+                          child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-
-                                  Text(
-                                    singleorder['service_name'],
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 20
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            singleOrder['service_name'],
+                                            style: TextStyle(color: Colors.black, fontSize: 20),
+                                          ),
+                                          Text(
+                                            singleOrder['service_city'],
+                                            style: TextStyle(color: Colors.grey, fontSize: 15),
+                                          ),
+                                          Text(
+                                            "Total Value: " + singleOrder['amount'].toString(),
+                                            style: TextStyle(color: Colors.grey, fontSize: 15),
+                                          ),
+                                        ],
                                       ),
+                                      Text(
+                                        singleOrder['order_status'].toString(),
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(color: Colors.black, fontSize: 15),
+                                      ),
+                                    ],
                                   ),
-
                                   Text(
-                                    singleorder['service_city'],
-                                    style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 15
-                                    ),
+                                    "Order id: " + singleOrder['id'].toString(),
+                                    style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),
                                   ),
-
-                                  Text(
-                                    "Total Value: "+ singleorder['amount'].toString(),
-                                    style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 15
-                                    ),
-                                  ),
-
-
                                 ],
-                              ),
-                              Text(
-                                singleorder['order_status'].toString(),
-                                textAlign: TextAlign.right,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15
-                                ),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            "Order id: " + singleorder['id'].toString(),
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                              fontWeight: FontWeight.bold
-                            ),
-                          ),
-                        ],
-                      )
-                    ),
-                  ),
-                );
-              },childCount: ordercontobj.orderlist["data"].length
+                              )),
+                        ),
+                      );
+                    }, childCount: orderController.orderList["data"].length),
+                  )
+            : SliverToBoxAdapter(
+                child: Center(
+                child: Text(
+                  displayText,
+                ),
+              )),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: 10,
           ),
-        )
-            :
-
-        SliverToBoxAdapter(
-          child: Center(
-            child: Text(
-              displaytext,
-            ),
-          )
         ),
-
-
-
-        SliverToBoxAdapter(
-          child: SizedBox(height: 10,),
-        ),
-
-
       ],
     );
   }

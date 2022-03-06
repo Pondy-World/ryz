@@ -1,15 +1,11 @@
-import 'package:localstorage/localstorage.dart';
-import 'package:ryz/AppState.dart';
-import 'package:ryz/main.dart';
 import 'package:flutter/material.dart';
-import 'package:ryz/controllers/authcontroller.dart';
-
-import 'package:ryz/register.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:ryz/AppState.dart';
+import 'package:ryz/controllers/authController.dart';
+import 'package:ryz/main.dart';
+import 'package:ryz/register.dart';
 
 class LoginMain extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return LoginMainPage(title: "RYZ");
@@ -26,7 +22,7 @@ class LoginMainPage extends StatefulWidget {
 }
 
 class _LoginMainPageState extends State<LoginMainPage> {
-  AuthController authcon = new AuthController();
+  AuthController authController = new AuthController();
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +45,7 @@ class _LoginMainPageState extends State<LoginMainPage> {
               ),
             ),
             Center(
-              child: Text("Sign into your account",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              child: Text("Sign into your account", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             ),
             SizedBox(
               height: 10,
@@ -58,7 +53,7 @@ class _LoginMainPageState extends State<LoginMainPage> {
             Padding(
               padding: const EdgeInsets.only(right: 20, left: 20),
               child: TextField(
-                controller: authcon.usernamecontroller,
+                controller: authController.usernameController,
                 cursorColor: Colors.black,
                 keyboardType: TextInputType.text,
                 decoration: new InputDecoration(
@@ -86,7 +81,7 @@ class _LoginMainPageState extends State<LoginMainPage> {
             Padding(
               padding: const EdgeInsets.only(right: 20, left: 20),
               child: TextField(
-                controller: authcon.passwordcontroller,
+                controller: authController.passwordController,
                 obscureText: true,
                 cursorColor: Colors.black,
                 keyboardType: TextInputType.visiblePassword,
@@ -118,27 +113,19 @@ class _LoginMainPageState extends State<LoginMainPage> {
                 onPressed: () async {
                   print("Login Pressed");
 
-                  if(authcon.usernamecontroller.text=="" || authcon.passwordcontroller.text==""){
+                  if (authController.usernameController.text == "" || authController.passwordController.text == "") {
                     Fluttertoast.showToast(
                         msg: "Please enter both fields",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.CENTER,
                         timeInSecForIosWeb: 1,
-                        fontSize: 16.0
-                    );
-                  }else{
-
+                        fontSize: 16.0);
+                  } else {
                     Fluttertoast.showToast(
-                        msg: "Please wait",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        fontSize: 16.0
-                    );
-                    var success= await authcon.loginUser();
+                        msg: "Please wait", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.CENTER, timeInSecForIosWeb: 1, fontSize: 16.0);
+                    var success = await authController.loginUser();
 
-                    if(success=="true"){
-
+                    if (success == "true") {
                       RyzAppState().isLogin = true;
 
                       Navigator.pop(context);
@@ -148,24 +135,18 @@ class _LoginMainPageState extends State<LoginMainPage> {
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.CENTER,
                           timeInSecForIosWeb: 1,
-                          fontSize: 16.0
-                      );
+                          fontSize: 16.0);
 
                       Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));
-
-                    }else{
-
+                    } else {
                       Fluttertoast.showToast(
-                          msg:  authcon.loginresponse['message'],
+                          msg: authController.loginResponse['message'],
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.CENTER,
                           timeInSecForIosWeb: 1,
-                          fontSize: 16.0
-                      );
+                          fontSize: 16.0);
                     }
-
                   }
-
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -182,27 +163,19 @@ class _LoginMainPageState extends State<LoginMainPage> {
             InkWell(
               onTap: () {
                 print("Register");
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => RegisterMainPage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterMainPage()));
               },
               child: Ink(
                 child: Center(
                     child: Text(
                   "New user? Register here!",
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontSize: 17
-                  ),
+                  style: TextStyle(decoration: TextDecoration.underline, fontSize: 17),
                 )),
               ),
             ),
-
             SizedBox(
               height: 20,
             )
-
           ],
         )));
   }

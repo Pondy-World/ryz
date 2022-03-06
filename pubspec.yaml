@@ -42,6 +42,7 @@ dependencies:
   location:
   url_launcher:
   font_awesome_flutter:
+  razorpay_flutter: ^1.2.9
 
 dev_dependencies:
   flutter_test:

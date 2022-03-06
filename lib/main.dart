@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:ryz/AppState.dart';
 import 'package:ryz/cartpage.dart';
-import 'package:ryz/controllers/cartcontroller.dart';
-import 'package:ryz/home/homepage.dart';
+import 'package:ryz/controllers/cartController.dart';
+import 'package:ryz/home/homePage.dart';
 import 'package:ryz/login.dart';
 import 'package:ryz/orderlist.dart';
 import 'package:ryz/profilebody.dart';
-import 'package:ryz/shops/ShopListcontroller.dart';
-import 'package:ryz/shops/shoplist.dart';
+import 'package:ryz/shops/ShopListController.dart';
+import 'package:ryz/shops/shopList.dart';
 import 'package:search_page/search_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -56,7 +56,11 @@ class _MyAppState extends State<MyApp> {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key);
+  MyHomePage({
+    Key? key,
+    this.initialPage = 0,
+  }) : super(key: key);
+  final int initialPage;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -80,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     // TODO: implement initState
+    _selectedIndex = widget.initialPage;
     _widgetOptions = <Widget>[HomePage(), ShopList(), CartPage(), OrderList()];
     super.initState();
   }
@@ -131,33 +136,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    // ClipRect(
-                                    //   child: Container(
-                                    //
-                                    //     // child: Align(
-                                    //     //   alignment: Alignment.center,
-                                    //     //   heightFactor: 0.4,
-                                    //     //   widthFactor: 0.2,
-                                    //     //   child: Image.asset(
-                                    //     //     "images/shopimg.jpeg",
-                                    //     //     // width: width/4,
-                                    //     //     height: width,
-                                    //     //   ),
-                                    //     // ),
-                                    //
-                                    //     child: ,
-                                    //
-                                    //   ),
-                                    // ),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8),
                                       child: Image.network(
-                                        "https://ryz.pondyworld.com/admin/upload/" + shop["image"],
+                                        "https://ryz.co.in/admin/upload/" + shop["image"],
                                         width: 100,
                                         height: 100,
                                       ),
                                     ),
-
                                     Expanded(
                                       child: Padding(
                                         padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
@@ -211,15 +197,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileBody()));
               },
             ),
-            IconButton(onPressed: () {
-              launchURL() async => await launch("https://wa.me/+918056889971");
-              launchURL();
-            }, icon: Icon(Icons.whatsapp, size: 25,))
+            IconButton(
+                onPressed: () {
+                  launchURL() async => await launch("https://wa.me/+918056889971");
+                  launchURL();
+                },
+                icon: Icon(
+                  Icons.whatsapp,
+                  size: 25,
+                ))
           ],
         ),
-
         body: _widgetOptions.elementAt(_selectedIndex),
-
         bottomNavigationBar: BottomNavigationBar(
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
@@ -254,21 +243,6 @@ class _MyHomePageState extends State<MyHomePage> {
           showUnselectedLabels: true,
           onTap: _onItemTapped,
         ),
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: (){
-        //
-        //     // var samppd = new CrtPds2(id: "4", name: "plop", amount: "4", count: 1, imgurlval: "aasdf", price: "5", offer: "false", offerprice: "", weight: "10");
-        //     // slfcart.insertProduct(samppd);
-        //     // slfcart.viewProduct();
-        //
-        //     // print("bef call");
-        //     // print(slfcart.viewProduct());
-        //     // print("aft call");
-        //
-        //     procartobj.cartProductRequest();
-        //   },
-        //   child: Text("clic"),
-        // ),
       );
     }
 

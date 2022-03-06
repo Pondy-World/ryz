@@ -1,24 +1,22 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
-import 'package:ryz/controllers/baseval.dart';
+import 'package:ryz/controllers/baseValues.dart';
 import 'package:http/http.dart' as http;
-import 'package:ryz/controllers/authcontroller.dart';
 
 class ProductController {
   String newStr = "";
   Auth auth= new Auth();
 
-  var productlist=[];
+  var productList=[];
 
-  void strmeth(String val_a) {
-    this.newStr = val_a;
+  void stringMethod({required String valA}) {
+    this.newStr = valA;
   }
 
   Future<String> fetchproducts() async {
     var url = Uri.parse(baseurl + 'Products/productlist.php');
     print(url);
-    String basicAuth = 'Basic ' + base64Encode(utf8.encode((auth.authname + ':' + auth.authpass)));
+    String basicAuth = 'Basic ' + base64Encode(utf8.encode((auth.authName + ':' + auth.authPass)));
 
     var response = await http.get(url, headers: <String, String>{
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -27,12 +25,12 @@ class ProductController {
 
     var jsonBody = response.body;
     var dumlist = jsonDecode(jsonBody);
-     productlist = dumlist['data'];
+     productList = dumlist['data'];
     print(jsonBody);
     // print(loginresponse["status"]);
-    print(productlist);
+    print(productList);
 
-    print(productlist[0]["id"]);
+    print(productList[0]["id"]);
 
     var statusval="oString();";
 

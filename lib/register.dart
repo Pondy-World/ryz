@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ryz/controllers/authcontroller.dart';
+import 'package:ryz/controllers/authController.dart';
 
 class RegisterMainPage extends StatefulWidget {
 
@@ -11,7 +11,7 @@ class RegisterMainPage extends StatefulWidget {
 
 class _RegisterMainPageState extends State<RegisterMainPage> {
 
-  AuthController authcon = new AuthController();
+  AuthController authController = new AuthController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +42,7 @@ class _RegisterMainPageState extends State<RegisterMainPage> {
             Padding(
               padding: const EdgeInsets.only(right: 20, left: 20),
               child: TextField(
-                controller: authcon.regnamecontroller,
+                controller: authController.registerNameController,
                 cursorColor: Colors.black,
                 keyboardType: TextInputType.text,
                 decoration: new InputDecoration(
@@ -71,7 +71,7 @@ class _RegisterMainPageState extends State<RegisterMainPage> {
               padding: const EdgeInsets.only(right: 20, left: 20),
               child: TextField(
                 cursorColor: Colors.black,
-                controller: authcon.regemailcontroller,
+                controller: authController.registerMailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: new InputDecoration(
                   focusedBorder: OutlineInputBorder(
@@ -98,7 +98,7 @@ class _RegisterMainPageState extends State<RegisterMainPage> {
             Padding(
               padding: const EdgeInsets.only(right: 20, left: 20),
               child: TextField(
-                controller: authcon.regmobnocontroller,
+                controller: authController.registerMobileNoController,
                 cursorColor: Colors.black,
                 keyboardType: TextInputType.number,
                 decoration: new InputDecoration(
@@ -126,7 +126,7 @@ class _RegisterMainPageState extends State<RegisterMainPage> {
             Padding(
               padding: const EdgeInsets.only(right: 20, left: 20),
               child: TextField(
-                controller: authcon.regpasswordcontroller,
+                controller: authController.registerPasswordController,
                 cursorColor: Colors.black,
                 obscureText: true,
                 keyboardType: TextInputType.visiblePassword,
@@ -158,16 +158,16 @@ class _RegisterMainPageState extends State<RegisterMainPage> {
                 onPressed: () async {
                   print("Register Pressed");
 
-                  String email =  authcon.regemailcontroller.text;
+                  String email =  authController.registerMailController.text;
                   final bool emailisValid = EmailValidator.validate(email);
 
-                  var mobnocount= authcon.regmobnocontroller.text.length;
+                  var mobnocount= authController.registerMobileNoController.text.length;
 
 
-                  if(authcon.regnamecontroller.text=="" ||
-                      authcon.regemailcontroller.text=="" ||
-                      authcon.regmobnocontroller.text=="" ||
-                      authcon.regpasswordcontroller.text==""){
+                  if(authController.registerNameController.text=="" ||
+                      authController.registerMailController.text=="" ||
+                      authController.registerMobileNoController.text=="" ||
+                      authController.registerPasswordController.text==""){
                     Fluttertoast.showToast(
                         msg: "Please enter all fields",
                         toastLength: Toast.LENGTH_SHORT,
@@ -202,7 +202,7 @@ class _RegisterMainPageState extends State<RegisterMainPage> {
                         timeInSecForIosWeb: 1,
                         fontSize: 16.0
                     );
-                    var success= await authcon.registerUser();
+                    var success= await authController.registerUser();
 
                     if(success=="true"){
                       Navigator.pop(context);
@@ -216,7 +216,7 @@ class _RegisterMainPageState extends State<RegisterMainPage> {
                     }else{
 
                       Fluttertoast.showToast(
-                          msg:  authcon.loginresponse['message'],
+                          msg:  authController.loginResponse['message'],
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.CENTER,
                           timeInSecForIosWeb: 1,
