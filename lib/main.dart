@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:ryz/AppState.dart';
 import 'package:ryz/cartpage.dart';
 import 'package:ryz/controllers/cartcontroller.dart';
-import 'package:ryz/controllers/cartdatacontroller.dart';
 import 'package:ryz/home/homepage.dart';
 import 'package:ryz/login.dart';
 import 'package:ryz/orderlist.dart';
@@ -12,6 +9,7 @@ import 'package:ryz/profilebody.dart';
 import 'package:ryz/shops/ShopListcontroller.dart';
 import 'package:ryz/shops/shoplist.dart';
 import 'package:search_page/search_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,10 +65,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
+  CartControllerSelf cartController = new CartControllerSelf();
 
-  CartControllerSelf slfcart = new CartControllerSelf();
-
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   late final List<Widget> _widgetOptions;
 
   bool showProfile = false;
@@ -87,6 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _widgetOptions = <Widget>[HomePage(), ShopList(), CartPage(), OrderList()];
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -113,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.search_outlined, color: Color(0xFFF0E68C)),
+              icon: Icon(Icons.search_outlined),
               onPressed: () async {
                 List<Map> shops = await ShopListController().fetchAllShops().then((shopListResponse) {
                   List<Map> listContainer = [];
@@ -122,100 +119,102 @@ class _MyHomePageState extends State<MyHomePage> {
                   }
                   return listContainer;
                 });
-                showSearch(context: context, delegate: SearchPage<Map>(
-                items: shops,
-                  builder: (shop) => Container(
-                    color: Colors.white,
-                    child: IntrinsicHeight(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // ClipRect(
-                          //   child: Container(
-                          //
-                          //     // child: Align(
-                          //     //   alignment: Alignment.center,
-                          //     //   heightFactor: 0.4,
-                          //     //   widthFactor: 0.2,
-                          //     //   child: Image.asset(
-                          //     //     "images/shopimg.jpeg",
-                          //     //     // width: width/4,
-                          //     //     height: width,
-                          //     //   ),
-                          //     // ),
-                          //
-                          //     child: ,
-                          //
-                          //   ),
-                          // ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8),
-                            child: Image.network(
-                              "https://ryz.pondyworld.com/admin/upload/"+shop["image"],
-                              width: 100,
-                              height: 100,
-                            ),
-                          ),
-
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    shop["shop_name"],
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(fontFamily: 'Lato', fontSize: 20, fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    shop["category_name"],
-                                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.normal, color: Colors.grey),
-                                  ),
-                                  Text(
-                                    shop["shop_street"],
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal, color: Colors.black, fontFamily: 'Lato'),
-                                  ),
-                                  Text(
-                                    "Upto 50% Offers available",
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.black,
+                showSearch(
+                    context: context,
+                    delegate: SearchPage<Map>(
+                        items: shops,
+                        builder: (shop) => Container(
+                              color: Colors.white,
+                              child: IntrinsicHeight(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    // ClipRect(
+                                    //   child: Container(
+                                    //
+                                    //     // child: Align(
+                                    //     //   alignment: Alignment.center,
+                                    //     //   heightFactor: 0.4,
+                                    //     //   widthFactor: 0.2,
+                                    //     //   child: Image.asset(
+                                    //     //     "images/shopimg.jpeg",
+                                    //     //     // width: width/4,
+                                    //     //     height: width,
+                                    //     //   ),
+                                    //     // ),
+                                    //
+                                    //     child: ,
+                                    //
+                                    //   ),
+                                    // ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8),
+                                      child: Image.network(
+                                        "https://ryz.pondyworld.com/admin/upload/" + shop["image"],
+                                        width: 100,
+                                        height: 100,
+                                      ),
                                     ),
-                                  ),
-                                ],
+
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              shop["shop_name"],
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(fontFamily: 'Lato', fontSize: 20, fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              shop["category_name"],
+                                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.normal, color: Colors.grey),
+                                            ),
+                                            Text(
+                                              shop["shop_street"],
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal, color: Colors.black, fontFamily: 'Lato'),
+                                            ),
+                                            Text(
+                                              "Upto 50% Offers available",
+                                              style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  searchLabel: 'Search Shops',
-                  showItemsOnEmpty: true,
-                  suggestion: Center(
-                    child: Text('Filter Shops by Pin Code or Name'),
-                  ),
-                  filter: (shop) => [
-                    shop["shop_name"],
-                    shop["shop_pincode"]
-                  ]
-              ));
+                        searchLabel: 'Search Shops',
+                        showItemsOnEmpty: true,
+                        suggestion: Center(
+                          child: Text('Filter Shops by Pin Code or Name'),
+                        ),
+                        filter: (shop) => [shop["shop_name"], shop["shop_pincode"]]));
               },
             ),
             IconButton(
-              icon: Icon(Icons.person_outline_rounded, color: Color(0xFFF0E68C)),
+              icon: Icon(Icons.person_outline_rounded),
               onPressed: () async {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileBody()));
               },
             ),
+            IconButton(onPressed: () {
+              launchURL() async => await launch("https://wa.me/+918056889971");
+              launchURL();
+            }, icon: Icon(Icons.whatsapp, size: 25,))
           ],
         ),
 

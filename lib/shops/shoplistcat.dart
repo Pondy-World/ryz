@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:ryz/productlst.dart';
 import 'package:ryz/profileonlyshop/poindex.dart';
@@ -41,7 +42,13 @@ class _ShopListcatState extends State<ShopListCat> {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+
+    var bannerimagae = [
+      "images/phot.jpg",
+      "images/phot.jpg",
+      "images/phot.jpg",
+      "images/phot.jpg",
+    ];
 
     return Scaffold(
         appBar: new PreferredSize(
@@ -92,6 +99,24 @@ class _ShopListcatState extends State<ShopListCat> {
                   SliverToBoxAdapter(
                     child: SizedBox(
                       height: 5,
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: CarouselSlider(
+                      options: CarouselOptions(height: 150.0, autoPlay: true),
+                      items: bannerimagae.map((i) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return Container(
+                                width: MediaQuery.of(context).size.width,
+                                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                decoration: BoxDecoration(
+                                  // color: Colors.amber
+                                ),
+                                child: Image.asset(i));
+                          },
+                        );
+                      }).toList(),
                     ),
                   ),
                   SliverList(

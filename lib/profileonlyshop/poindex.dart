@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ProfileOnlyIndexMain extends StatelessWidget {
   final selectedshop;
@@ -157,12 +158,8 @@ class _ProfileOnlyIndexState extends State<ProfileOnlyIndex> {
 
             SliverToBoxAdapter(
               child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 4,
-                      left: 8,
-                      bottom: 8,
-                      right: 8
-                  ),
+                  padding: const EdgeInsets.all(10),
+
                   child: Table(
                     // border: TableBorder.all(),
 
@@ -174,11 +171,14 @@ class _ProfileOnlyIndexState extends State<ProfileOnlyIndex> {
                     children: <TableRow>[
                       TableRow(
                         children: <Widget>[
-                          Text(
-                            "Address:",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.blueGrey
+                          TableCell(
+                            verticalAlignment: TableCellVerticalAlignment.top,
+                            child: Text(
+                              "Address:",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.blueGrey
+                              ),
                             ),
                           ),
                           TableCell(
@@ -287,6 +287,21 @@ class _ProfileOnlyIndexState extends State<ProfileOnlyIndex> {
 
                         ],
                       ),
+                      TableRow(
+                          children: <Widget>[
+                            Text('Connect with Us:', style: TextStyle(fontSize: 20, color: Colors.blueGrey),),
+                            TableCell(child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Icon(Icons.facebook, color: Colors.blueGrey,),
+                                Icon(Icons.whatsapp, color: Colors.blueGrey,),
+                                Icon(FontAwesomeIcons.instagram, color: Colors.blueGrey,),
+                                Icon(FontAwesomeIcons.linkedin, color: Colors.blueGrey,)
+                              ],
+                            ))
+
+                          ]
+                      )
 
 
                     ],
@@ -536,7 +551,6 @@ class _ProfileOnlyIndexState extends State<ProfileOnlyIndex> {
                 ),
               ),
             ),
-
           ],
         ),
       );

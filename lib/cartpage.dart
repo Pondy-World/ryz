@@ -348,7 +348,7 @@ class _CartPageState extends State<CartPage> {
                                           timeInSecForIosWeb: 1,
                                           fontSize: 16.0);
 
-                                      var success = await ordercontobj.addOrder(procartobj.cartproducts, carttotal.toString());
+                                      var success = await ordercontobj.addOrder(procartobj.cartproducts, carttotal);
 
                                       if (success == "true") {
                                         Fluttertoast.showToast(

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:ryz/controllers/ordercontroller.dart';
@@ -32,8 +34,6 @@ class _OrderDetailsState extends State<OrderDetails> {
   _OrderDetailsState(this.selectedorder);
 
   getData() async {
-    final LocalStorage storage = new LocalStorage('ryxstorage');
-
     await ordercontobj.fetchOrderdetails(selectedorder['id']);
 
     setState(() {});
@@ -85,7 +85,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                               ),
                               Text(
                                 "Total Value: " +
-                                    selectedorder['amount'].toString(),
+                                    selectedorder['amount'].toString() + " ₹",
                                 style:
                                     TextStyle(color: Colors.grey, fontSize: 15),
                               ),
@@ -124,7 +124,6 @@ class _OrderDetailsState extends State<OrderDetails> {
               ),
             ),
           ),
-
           (ordercontobj.orderdetails == null)
               ? SliverToBoxAdapter(
                   child: Center(
@@ -135,28 +134,32 @@ class _OrderDetailsState extends State<OrderDetails> {
               : SliverList(
                   delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
-                    var singlepd = ordercontobj.orderdetails[index];
-                    var tot=  double.parse(singlepd['product_amount'])  *  double.parse(singlepd['product_quantity']);
+                    var single = ordercontobj.orderdetails[0];
+                    List<dynamic> productAmounts = jsonDecode(single['product_amounts']);
+                    List<dynamic> productQuantity = jsonDecode(single['product_quantity']);
+                    List<String> productTitles = single['title'].toString().replaceAll("[", "").replaceAll("]", "").split(", ");
+                    num tot=  productAmounts[index]  *  productQuantity[index];
                     return Card(
                       child: Padding(
                         padding: const EdgeInsets.all(0),
                         child: ListTile(
                           title: Text(
-                            singlepd['title'],
+                            productTitles[index],
                             style: TextStyle(
                                 color: Colors.black,
                             ),
+                            overflow: TextOverflow.ellipsis,
                           ),
 
                           subtitle: Text(
-                            singlepd['product_amount'] +" * " +singlepd['product_quantity'],
+                            "per Unit: " + (productAmounts[index]).toString(),
                             style: TextStyle(
                               color: Colors.black,
                             ),
                           ),
 
                           trailing: Text(
-                            tot.toString(),
+                            tot.toString() + " ₹",
                             style: TextStyle(
                               color: Colors.black,
                             ),
@@ -164,8 +167,20 @@ class _OrderDetailsState extends State<OrderDetails> {
                         ),
                       ),
                     );
-                  }, childCount: ordercontobj.orderdetails.length),
+                  }, childCount: jsonDecode(ordercontobj.orderdetails[0]["product_amounts"]).length),
                 ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Total: ${selectedorder['amount'].toString()} ₹",
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.blue
+                ),
+              ),
+            ),
+          ),
           SliverToBoxAdapter(
             child: SizedBox(
               height: 10,

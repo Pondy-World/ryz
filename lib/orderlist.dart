@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:ryz/AppState.dart';
 import 'package:ryz/controllers/ordercontroller.dart';
 import 'package:ryz/orderdetails.dart';
 
@@ -13,17 +14,17 @@ class OrderList extends StatefulWidget {
 class _OrderListState extends State<OrderList> {
 
   var displaytext= "No orders to show";
-  var login=false;
+  var login=RyzAppState().isLogin;
   OrderController ordercontobj = new OrderController();
 
   getData() async {
     final LocalStorage storage = new LocalStorage('ryxstorage');
 
-    if(storage.getItem("logindetails")!=null){
-      login= true;
-      var loginid= storage.getItem("logindetails");
-      print(loginid);
-      await ordercontobj.fetchOrders(loginid['id']);
+    if(RyzAppState().isLogin){
+      var loginID= RyzAppState().id;
+      print(loginID);
+      await ordercontobj.fetchOrders(loginID);
+      setState(() {});
     }
     setState(() {
 
@@ -61,7 +62,7 @@ class _OrderListState extends State<OrderList> {
         SliverList(
           delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index){
-                    var singleorder= ordercontobj.orderlist[index];
+                    var singleorder= ordercontobj.orderlist["data"][index];
                 return InkWell(
                   onTap: (){
                     Navigator.push(
@@ -138,7 +139,7 @@ class _OrderListState extends State<OrderList> {
                     ),
                   ),
                 );
-              },childCount: ordercontobj.orderlist.length
+              },childCount: ordercontobj.orderlist["data"].length
           ),
         )
             :

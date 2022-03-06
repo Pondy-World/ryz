@@ -40,6 +40,8 @@ dependencies:
   search_page: ^2.0.0+1
   geocoding:
   location:
+  url_launcher:
+  font_awesome_flutter:
 
 dev_dependencies:
   flutter_test:
